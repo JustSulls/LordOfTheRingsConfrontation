@@ -1,0 +1,19 @@
+﻿ID,Name,Strength,Precedence,Text
+1,Frodo,1,1,"When attacked, may retreat sideways."
+2,Pippin,1,1,"When attacking, may retreat backwards."
+3,Gandalf,5,0,The Dark Player must play his card first.
+4,Sam,2,1,"When with Frodo, is Strength 5 and may replace Frodo in battle."
+5,Legolas,3,2,Instantly defeats the Flying Nazgul.
+6,Aragorn,4,0,May attack any adjacent region.
+7,Gimli,3,2,Instantly defeats the Orcs.
+8,Merry,2,2,Instantly defeats the Witch King.
+9,Boromir,0,2,Both Boromir and Enemy character are instantly defeated.
+10,Orcs,2,2,"When attacking, instantly defeat the first character."
+11,Shelob,5,0,"After Shelob defeats an Enemy character, she is immediately returned to Gondor."
+12,Saruman,4,0,May decide that no cards are played.
+13,Flying Nazgul,3,0,May attack a single Good character anywhere on the board.
+14,Balrog,5,2,"When in Moria, instantly defeats any Character using the Tunnel."
+15,Warg,2,3,Enemy character's text is ignored.
+16,Black Rider,3,0,May move forward any number of regions to attack.
+17,Witch King,5,0,May attack sideways.
+18,Cave Troll,9,0,The Dark Player's card has no value or effect.
