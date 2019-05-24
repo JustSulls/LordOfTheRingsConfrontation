@@ -19,6 +19,32 @@ class MainWindow(PySide2.QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = PySide2.QtWidgets.QApplication([])
-    window = MainWindow()
-    window.show()
+    # window = MainWindow()
+    # window.show()
+    test = FormLOTRConfrontation.FormLOTRConfrontation()
+    test.show()
+
+    # Main window
+    # window = PySide2.QtWidgets.QMainWindow()
+    # button1 = PySide2.QtWidgets.QPushButton("One")
+    # button2 = PySide2.QtWidgets.QPushButton("2")
+    # button3 = PySide2.QtWidgets.QPushButton("3")
+    #
+    # # Layout
+    # layout = PySide2.QtWidgets.QGridLayout()
+    # layout.addWidget(button1, 0,0)
+    # layout.addWidget(button2, 0,1)
+    # layout.addWidget(button3, 2,0)
+    #
+    # # To be central widget
+    # central = PySide2.QtWidgets.QGraphicsView()
+    #
+    # # Make central widget main window's central widget
+    # window.setCentralWidget(central)
+    #
+    # # Set central widget's layout
+    # central.setLayout(layout)
+    #
+    # window.show()
+
     sys.exit(app.exec_())
