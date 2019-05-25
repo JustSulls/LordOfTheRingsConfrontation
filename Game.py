@@ -8,7 +8,10 @@ import Map
 
 class Game:
 
-    def __init__(self):
+    def __init__(self, form = None):
+        # New form to main window
+        self.form = form
+
         self.characters = []
         self.good_characters = []
         self.evil_characters = []
@@ -138,9 +141,9 @@ class Game:
         :param character_sauron:
         :return:
         """
-        print("Battle initiating between " + character_fellowship.name + "(Strength " +
-              str(character_fellowship.strength) + ") " + " and " + character_sauron.name +
-              "(Strength " + str(character_sauron.strength) + "). ")
+        self.form.msg("Battle initiating between " + character_fellowship.name + "(Strength " +
+                      str(character_fellowship.strength) + ") " + " and " + character_sauron.name +
+                      "(Strength " + str(character_sauron.strength) + "). ")
 
         # Clear old strength card values.
         self.strength_card_sauron = None
@@ -193,20 +196,20 @@ class Game:
         :return: True if instant kill applied, False otherwise.
         """
         if character_fellowship.name == "Legolas" and character_sauron.name == "Flying Nazgul":
-            print(character_fellowship.name + " special activated. ")
-            print(character_fellowship.special_text)
+            self.form.msg(character_fellowship.name + " special activated. ")
+            self.form.msg(character_fellowship.special_text)
             self.delete_character(character_sauron)
             return True
         elif character_fellowship.name == "Gimli" and character_sauron.name == "Orcs":
-            print(character_fellowship.name + " special activated. ")
+            self.form.msg(character_fellowship.name + " special activated. ")
             self.delete_character(character_sauron)
             return True
         elif character_fellowship.name == "Merry" and character_sauron.name == "Witch King":
-            print(character_fellowship.name + " special activated. ")
+            self.form.msg(character_fellowship.name + " special activated. ")
             self.delete_character(character_sauron)
             return True
         elif character_sauron.name == "Balrog" and character_sauron.region is self.map.regions["Moria"]:
-            print(character_sauron.name + " special activated. ")
+            self.form.msg(character_sauron.name + " special activated. ")
             self.delete_character(character_fellowship)
             return True
         else:
@@ -231,31 +234,31 @@ class Game:
         if character_sauron.name == "Cave Troll":
             strength_sauron -= self.strength_card_sauron
 
-        print(character_fellowship.name + " strength (" + str(strength_fellowship) + "). ")
-        print(character_sauron.name + " strength (" + str(strength_sauron) + "). ")
+        self.form.msg(character_fellowship.name + " strength (" + str(strength_fellowship) + "). ")
+        self.form.msg(character_sauron.name + " strength (" + str(strength_sauron) + "). ")
 
         if strength_fellowship > strength_sauron:
             # Fellowship wins.
-            print("Fellowship wins battle. " + character_fellowship.name + " defeated " +
+            self.form.msg("Fellowship wins battle. " + character_fellowship.name + " defeated " +
                   character_sauron.name + ". ")
             self.delete_character(character_sauron)
             pass
         elif strength_fellowship < strength_sauron:
             # Sauron wins.
-            print("Sauron wins battle. " + character_sauron.name + " defeated " + character_fellowship.name + ". ")
+            self.form.msg("Sauron wins battle. " + character_sauron.name + " defeated " + character_fellowship.name + ". ")
             if character_fellowship.name == "Frodo":
                 self.game_over = True
                 self.game_winner = self.player_sauron
             if character_sauron.name == "Shelob":
                 # Shelob special, return her to Gondor.
-                print("Special activated. " + character_sauron.special_text)
+                self.form.msg("Special activated. " + character_sauron.special_text)
                 self.shelob.move(self.map.regions["Gondor"])
             self.delete_character(character_fellowship)
             pass
         else:
             # Tie
-            print("Tie resulted. ")
-            print("Both characters defeated. ")
+            self.form.msg("Tie resulted. ")
+            self.form.msg("Both characters defeated. ")
             # Delete both characters from their player's lists
             self.delete_character(character_fellowship)
             self.delete_character(character_sauron)
@@ -271,13 +274,13 @@ class Game:
 
         # If there are potential moves
         if list_of_potential_moves:
-            print("Potential regions to move " + chosen_character.name + ": ")
+            self.form.msg("Potential regions to move " + chosen_character.name + ": ")
             i = 0
 
             # Show region names for received coordinates
             for coordination in list_of_potential_moves:
                 the_region = self.map.positions[tuple(coordination)]
-                print(str(i) + " : " + the_region.__str__())
+                self.form.msg(str(i) + " : " + the_region.__str__())
                 i += 1
             try:
                 # --SCAFFOLD--
@@ -293,9 +296,9 @@ class Game:
                     # elif choice == 1:
                     #     return self.map.positions[tuple(list_of_potential_moves[1])]
                 except Exception as ex:
-                    print("Error during chosen character. " + str(ex))
+                    self.form.msg("Error during chosen character. " + str(ex))
             except Exception as ex:
-                print("Error during chosen character. " + str(ex))
+                self.form.msg("Error during chosen character. " + str(ex))
 
     def handle_specials(self, character_fellowship: Character, character_sauron: Character)-> Character:
         # Do special ability.
@@ -340,8 +343,8 @@ class Game:
 
         # Get character.
         # View board
-        print("\n")
-        print(self.map)
+        self.form.msg("\n")
+        self.form.msg(self.map)
 
         # Choose character
         chosen_character = self.player_fellowship.choose_character_move()
@@ -359,30 +362,30 @@ class Game:
             return
         if self.region_with_battle_event:
             # Get the info necessary to call battle(), then call it.
-            print("Battle imminent. " + chosen_character.name + " attacking. ")
+            self.form.msg("Battle imminent. " + chosen_character.name + " attacking. ")
             region_with_battle = self.region_with_battle_event
             # If region contains more than one enemy, choose which to fight.
             if len(region_with_battle.characters) > 2:
-                print("Choose which enemy to fight. ")
+                self.form.msg("Choose which enemy to fight. ")
                 print_str = ""
                 for enemy in region_with_battle.characters:
                     if enemy.side == Character.Side.EVIL:
                         print_str += enemy.name + " "
-                print(print_str)
+                self.form.msg(print_str)
                 # --SCAFFOLD--
                 # choice = "Saruman"
                 choice = str(input())
                 # -
                 for enemy in region_with_battle.characters:
                     if choice.lower() == enemy.name.lower():
-                        print("(" + choice + ") chosen. ")
+                        self.form.msg("(" + choice + ") chosen. ")
                         self.battle(chosen_character, enemy)
                         break
                 # else:
                 #     # Chosen enemy not found.
                 #     raise ValueError("Error during Game good_player_turn(). Chosen enemy not found. ")
             elif len(region_with_battle.characters) > 1:
-                print("One enemy in region. ")
+                self.form.msg("One enemy in region. ")
                 # Region contains just one enemy
                 # Get enemy from region to do battle with.
                 enemy = region_with_battle.get_sauron_character()
@@ -393,7 +396,7 @@ class Game:
                 raise ValueError("Error getting sauron character returned from region in "
                                  "Game.get_enemy_to_battle().")
             pass
-        print("\n")
+        self.form.msg("\n")
 
         # Make sure no one died
         # self.update_player_characters(self.player_fellowship)
@@ -409,7 +412,7 @@ class Game:
 
         # Get character.
         # View board
-        print(self.map)
+        self.form.msg(self.map)
 
         # Choose character
         chosen_character = self.player_sauron.choose_character_move()
@@ -422,11 +425,11 @@ class Game:
 
         # If moved into enemy territory
         if self.region_with_battle_event:
-            print("Battle imminent. " + chosen_character.name + " attacking. ")
+            self.form.msg("Battle imminent. " + chosen_character.name + " attacking. ")
             region_with_battle = self.region_with_battle_event
             # If region contains more than one enemy, choose which to fight.
             if len(region_with_battle.characters) > 2:
-                print("Choose which enemy to fight. ")
+                self.form.msg("Choose which enemy to fight. ")
                 print_str = ""
                 for enemy in region_with_battle.characters:
                     if enemy.side == Character.Side.GOOD:
@@ -438,14 +441,14 @@ class Game:
                 for enemy in region_with_battle.characters:
                     if choice.lower() == enemy.name.lower():
                         # Note - order of parameters here matters.
-                        print("(" + choice + ") chosen. ")
+                        self.form.msg("(" + choice + ") chosen. ")
                         self.battle(enemy, chosen_character)
                         break
                 # else:
                 #     # Chosen enemy not found.
                 #     raise ValueError("Error during Game good_player_turn(). Chosen enemy not found. ")
             elif len(region_with_battle.characters) > 1:
-                print("One enemy in region. ")
+                self.form.msg("One enemy in region. ")
                 # Region contains just one enemy
                 # Get enemy from region to do battle with.
                 enemy = region_with_battle.get_fellowship_character()
@@ -465,7 +468,7 @@ class Game:
         self.player_fellowship.choose_starting_positions()
         self.player_sauron.choose_starting_positions()
 
-        print("\nGame starting. ")
+        self.form.msg("\nGame starting. ")
         while not self.game_over:
             self.good_player_turn()
             self.bad_player_turn()
@@ -486,4 +489,4 @@ class Game:
             character_region.characters.remove(character)
         # Delete region in character
         character.region = None
-        print(character.name + " has been slain. ")
+        self.form.msg(character.name + " has been slain. ")
