@@ -43,7 +43,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             # Insert into regions/text layout
             self.sub_grid_layout_1_0.addLayout(self.sub_box_layout_1_0_0_0, 0, 0)
             self.sub_grid_layout_1_0.addLayout(self.sub_box_layout_1_0_1_0, 1, 0)
-            self.sub_grid_layout_1_0.addLayout(self.sub_box_layout_1_0_2_0, 2, 0, 4)
+            # self.sub_grid_layout_1_0.addLayout(self.sub_box_layout_1_0_2_0, 2, 0, 4)
+            # EDIT --
+            self.sub_grid_layout_1_0.addLayout(self.sub_box_layout_1_0_2_0, 2, 0)
+            # EDIT end --
             # Insert into center layout
             self.sub_grid_layout_1.addLayout(self.sub_grid_layout_0_0, 0, 0)
             self.sub_grid_layout_1.addLayout(self.sub_grid_layout_1_0, 1, 0)
