@@ -9,5 +9,5 @@ if __name__ == "__main__":
     # window = MainWindow()
     # window.show()
     test = FormLOTRConfrontation.FormLOTRConfrontation()
-    test.show()
+    # test.show()
     sys.exit(app.exec_())
