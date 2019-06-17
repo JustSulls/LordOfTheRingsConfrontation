@@ -348,6 +348,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.current_region = None
 
         self.graphics_scene_start_window()
+        #self.graphics_scene_main_window()
 
     # QGraphicsScene to QGraphicsView central widget of self:QMainWindow
     # Also, QGraphicsView central widget Layout to start_grid_layout
@@ -366,7 +367,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         # Size window to 50% available screen space
         self.resize(PySide2.QtWidgets.QDesktopWidget.availableGeometry(
-            PySide2.QtWidgets.QDesktopWidget()).size() * 0.5)
+            PySide2.QtWidgets.QDesktopWidget()).size() * 0.2)
 
         self.show()
 
@@ -387,7 +388,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         # Size window to 70% available screen space
         self.resize(PySide2.QtWidgets.QDesktopWidget.availableGeometry(
-            PySide2.QtWidgets.QDesktopWidget()).size() * 0.8)
+            PySide2.QtWidgets.QDesktopWidget()).size() * 0.5)
 
         self.show()
 
