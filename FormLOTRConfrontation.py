@@ -68,6 +68,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             def init_character_buttons(self):
                 # Create good character push buttons
                 def init_good_character_buttons(self):
+                    # TODO: Switch buttons to radio btns
                     # Frodo button
                     self.button_frodo = PySide2.QtWidgets.QPushButton("Frodo")
 
@@ -329,7 +330,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.player_fellowship = self.game.player_fellowship
         self.player_sauron = self.game.player_sauron
 
-        # To be central widget will be QGraphicsView
+        # Start window central widget QGraphicsView
+        self.start_window_central_widget_graphics_view = PySide2.QtWidgets.QGraphicsView()
+
+        # Main window central widget will QGraphicsView
         self.central_widget_graphics_view = PySide2.QtWidgets.QGraphicsView()
 
         # Map of middle earth
@@ -349,20 +353,24 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         self.graphics_scene_start_window()
 
-    # QGraphicsScene to QGraphicsView central widget of self:QMainWindow
-    # Also, QGraphicsView central widget Layout to start_grid_layout
     def graphics_scene_start_window(self):
+        """
+        QGraphicsScene to QGraphicsView central widget of self:QMainWindow
+        Also, QGraphicsView central widget Layout to start_grid_layout
+        :return:
+        """
         # Create Graphics scene
-        scene_main = PySide2.QtWidgets.QGraphicsScene()
+        scene_start = PySide2.QtWidgets.QGraphicsScene()
 
-        # Add QGraphicsScene to GraphicsView (Mainwindow's central widget)
-        self.central_widget_graphics_view.setScene(scene_main)
+        # Add QGraphicsScene to GraphicsView (QMainwindow's central widget)
+        # self.central_widget_graphics_view.setScene(scene_main)
+        self.start_window_central_widget_graphics_view.setScene(scene_start)
 
         # Set MainWindow's central widget
-        self.setCentralWidget(self.central_widget_graphics_view)
+        self.setCentralWidget(self.start_window_central_widget_graphics_view)
 
         # Set central widget's (GraphicsView's) layout
-        self.central_widget_graphics_view.setLayout(self.setup_start_grid_layout)
+        self.start_window_central_widget_graphics_view.setLayout(self.setup_start_grid_layout)
 
         # Size window to 50% available screen space
         self.resize(PySide2.QtWidgets.QDesktopWidget.availableGeometry(
@@ -370,13 +378,23 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         self.show()
 
-    # QGraphicsScene to QGraphicsView central widget of self:QMainWindow
-    # Also, QGraphicsView central widget Layout to main_grid_layout
+    def start_game(self):
+        self.enable_all_buttons()
+        self.graphics_scene_main_window()
+
     def graphics_scene_main_window(self):
+        """
+        QGraphicsScene to QGraphicsView central widget of self:QMainWindow
+        Also, QGraphicsView central widget Layout to main_grid_layout
+        :return:
+        """
         # Create Graphics scene
         scene_main = PySide2.QtWidgets.QGraphicsScene()
 
         # Add QGraphicsScene to GraphicsView (Mainwindow's central widget)
+        # TODO: From Qt docs, "Sets the current scene to scene . If scene is already being viewed,
+        # this function does nothing. Need to replace scene correctly.
+        # Instead of setScene to new scene main, make new central widget.
         self.central_widget_graphics_view.setScene(scene_main)
 
         # Set MainWindow's central widget
@@ -423,17 +441,6 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         for arg in args:
             txt += arg
         self.text_box.setText(txt)
-
-    def start_game(self):
-        self.enable_all_buttons()
-        #TODO: LEFTOFF HERE
-        self.button_select_evil.setDisabled(True)
-        self.button_select_good.setDisabled(True)
-        self.button_select_evil.hide()
-        self.button_select_good.hide()
-        self.hide()
-        self.graphics_scene_main_window()
-        pass
 
     def select_evil_clicked(self):
         self.real_player = self.player_sauron

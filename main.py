@@ -12,5 +12,4 @@ if __name__ == "__main__":
     # window.show()
     test = FormLOTRConfrontation.FormLOTRConfrontation()
     # test.show()
-    print ("matt")
     sys.exit(app.exec_())
