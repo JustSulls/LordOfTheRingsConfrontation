@@ -32,11 +32,11 @@ class Region:
     def __ne__(self, other): return not self == other
 
     @property
-    def location(self):
+    def location(self) -> [int, int]:
         return [self.x, self.y]
 
     @property
-    def contains_characters(self):
+    def contains_characters(self) -> bool:
         if len(self.characters) > 0:
             return True
         else:
@@ -133,7 +133,7 @@ class Region:
         return evil_found
 
     @property
-    def contains_good_characters(self):
+    def contains_good_characters(self) -> bool:
         good_found = False
         for character in self.characters:
             if character.side == Character.Side.GOOD:
@@ -142,14 +142,14 @@ class Region:
         return good_found
 
     @property
-    def conflict_exists(self):
+    def conflict_exists(self) -> bool:
         if self.contains_evil_characters and self.contains_good_characters:
             return True
         else:
             return False
 
     @property
-    def contains_three_evil_characters(self):
+    def contains_three_evil_characters(self) -> bool:
         evil_char_count = 0
         if self.contains_evil_characters:
             for character in self.characters:
@@ -162,7 +162,12 @@ class Region:
         else:
             return False
 
-    def region_receive_character(self, character):
+    def region_receive_character(self, character: Character):
+        """
+        Adds character to Region. Sets character Region to self.
+        Called by Map.
+        :param character: Character to be placed on region.
+        """
         self.characters.append(character)
         character.region = self
 

@@ -36,6 +36,10 @@ class Map:
         return conflict
 
     def init_places(self):
+        """
+        Creates Regions and places them in the dictionary 'regions'.
+        :return:
+        """
         i = 0
         for x in range(4):
             for y in range(4):
