@@ -15,6 +15,15 @@ class Player:
 
         self.characters = []
 
+    def __eq__(self, other):
+        if not isinstance(other, Player):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return self.side == other.side and self.name == other.name
+
+    def __ne__(self, other): return not self == other
+
     def init_cards(self):
         for x in range(1, 6):
             self.strength_cards.append(StrengthCard.StrengthCard(x))
@@ -40,7 +49,7 @@ class Player:
         print("Chosen strength card (" + str(card.strength) + ") for player (" + self.name + "). ")
         return card.strength
 
-    def move_character(self, character: Character, region: Map.Region):
+    def move_character(self, character: Character, region: Map.Region) -> bool:
         """
         Moves character to region. Does not currently handle battle.
         :param character: (Character) to be moved.
@@ -69,6 +78,7 @@ class Player:
                 # Valid region passed to this function.
                 # Move character to chosen region.
                 character.move(region)
+                return True
             else:
                 # Invalid move, not in potential regions.
                 raise ValueError("Invalid move, not in potential regions.")
