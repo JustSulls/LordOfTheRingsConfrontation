@@ -122,7 +122,7 @@ class Game:
                 break
         return found
 
-    def get_character(self, name: str)-> Character:
+    def get_character(self, name: str) -> Character:
         """
         Get character.
         :param name: Name (str) of character to get.
@@ -131,6 +131,18 @@ class Game:
         for character in self.characters:
             if name == character.name:
                 return character
+
+        return None
+
+    def get_region(self, name: str) -> Region:
+        """
+        Get region.
+        :param name: Name (str) of region to get
+        :return: Character if found, None if not.
+        """
+        for region in self.map.regions:
+            if name == region:
+                return self.map.regions[name]
 
         return None
 
@@ -300,7 +312,7 @@ class Game:
             except Exception as ex:
                 self.form.msg("Error during chosen character. " + str(ex))
 
-    def handle_specials(self, character_fellowship: Character, character_sauron: Character)-> Character:
+    def handle_specials(self, character_fellowship: Character, character_sauron: Character) -> Character:
         # Do special ability.
         if character_fellowship.name == "Gandalf":
             chosen_card = character_fellowship.do_special_ability(self.player_sauron)
@@ -332,37 +344,38 @@ class Game:
             if self.map.exists_conflict:
                 character_sauron.do_special_ability(character_fellowship)
 
-    def good_player_turn(self):
+    def player_turn(self, player, character, region) -> bool:
+        """
+        To be called by FormLOTR when player pushes button to make move.
+        :param player: Player making the move.
+        :param character: Character being moved. Chosen by Player.
+        :param region: Region being moved to. Chosen by Player.
+        :return: Success or fail (bool).
+        """
+        #TODO : implement
+        if player.side == character.side.EVIL:
+            return self.bad_player_turn(character, region)
+        else:
+            return self.good_player_turn(character, region)
+
+    #TODO: Make this callable by self.player turn()
+    def good_player_turn(self, character: Character, region: Region):
         """
         Good player chooses which character to move and which region to move to.
         Then moves character to region.
         :return: Region moved to.
         """
-        # Make sure no one died
-        # self.update_player_characters(self.player_fellowship)
-
-        # Get character.
-        # View board
-        self.form.msg("\n")
-        self.form.msg(self.map)
-
-        # Choose character
-        chosen_character = self.player_fellowship.choose_character_move()
-
-        # Choose region.
-        chosen_region = self.choose_character_region(chosen_character)
-
         # Move character to region.
-        self.player_fellowship.move_character(chosen_character, chosen_region)
+        self.player_fellowship.move_character(character, region)
 
         # Check for first win condition.
-        if chosen_character.region.name == "Mordor":
+        if character.region.name == "Mordor":
             self.game_over = True
             self.game_winner = self.player_fellowship
             return
         if self.region_with_battle_event:
             # Get the info necessary to call battle(), then call it.
-            self.form.msg("Battle imminent. " + chosen_character.name + " attacking. ")
+            self.form.msg("Battle imminent. " + character.name + " attacking. ")
             region_with_battle = self.region_with_battle_event
             # If region contains more than one enemy, choose which to fight.
             if len(region_with_battle.characters) > 2:
@@ -379,7 +392,7 @@ class Game:
                 for enemy in region_with_battle.characters:
                     if choice.lower() == enemy.name.lower():
                         self.form.msg("(" + choice + ") chosen. ")
-                        self.battle(chosen_character, enemy)
+                        self.battle(character, enemy)
                         break
                 # else:
                 #     # Chosen enemy not found.
@@ -391,41 +404,25 @@ class Game:
                 enemy = region_with_battle.get_sauron_character()
                 if enemy:
                     # Enter battle with enemy sauron character
-                    self.battle(chosen_character, enemy)
+                    self.battle(character, enemy)
             else:
                 raise ValueError("Error getting sauron character returned from region in "
                                  "Game.get_enemy_to_battle().")
             pass
         self.form.msg("\n")
 
-        # Make sure no one died
-        # self.update_player_characters(self.player_fellowship)
-
-    def bad_player_turn(self):
+    # TODO: Make this callable by self.player turn()
+    def bad_player_turn(self, character: Character, region: Region) -> bool:
         """
-        Bad player chooses which character to move and which region to move to.
-        Then moves character to region.
-        :return: Region moved to.
+        Moves character to region.
+        :return: Success or fail (bool)
         """
-        # Make sure no one died
-        # self.update_player_characters(self.player_sauron)
-
-        # Get character.
-        # View board
-        self.form.msg(self.map)
-
-        # Choose character
-        chosen_character = self.player_sauron.choose_character_move()
-
-        # Choose region.
-        chosen_region = self.choose_character_region(chosen_character)
-
         # Move character to region.
-        self.player_sauron.move_character(chosen_character, chosen_region)
+        move_success = self.player_sauron.move_character(character, region)
 
         # If moved into enemy territory
         if self.region_with_battle_event:
-            self.form.msg("Battle imminent. " + chosen_character.name + " attacking. ")
+            self.form.msg("Battle imminent. " + character.name + " attacking. ")
             region_with_battle = self.region_with_battle_event
             # If region contains more than one enemy, choose which to fight.
             if len(region_with_battle.characters) > 2:
@@ -442,7 +439,7 @@ class Game:
                     if choice.lower() == enemy.name.lower():
                         # Note - order of parameters here matters.
                         self.form.msg("(" + choice + ") chosen. ")
-                        self.battle(enemy, chosen_character)
+                        self.battle(enemy, character)
                         break
                 # else:
                 #     # Chosen enemy not found.
@@ -454,14 +451,12 @@ class Game:
                 enemy = region_with_battle.get_fellowship_character()
                 if enemy:
                     # Enter battle with enemy sauron character
-                    self.battle(enemy, chosen_character)
+                    self.battle(enemy, character)
             else:
                 raise ValueError("Error getting sauron character returned from region in "
                                  "Game.get_enemy_to_battle().")
             pass
-
-            # Make sure no one died
-            # self.update_player_characters(self.player_sauron)
+        return move_success
 
     def play_game(self):
         # Board setup
