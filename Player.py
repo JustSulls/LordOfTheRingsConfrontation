@@ -83,7 +83,7 @@ class Player:
                 # Invalid move, not in potential regions.
                 raise ValueError("Invalid move, not in potential regions.")
         else:
-            raise Exception('No potential_region_coordinates in move_character().')
+            raise Exception('No region coordinates returned in player.move_character().')
 
     def choose_character_move(self)-> Character:
         """

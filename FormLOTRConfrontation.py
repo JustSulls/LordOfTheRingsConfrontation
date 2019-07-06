@@ -498,9 +498,43 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         else:
             for button in self.group_good_character_buttons.buttons():
                 button.setDisabled(True)
-
-        # Get player first move.
         # TODO: Left off here. Game has started and player chosen. Other player's buttons disabled.
+        # Have player choose starting positions for his characters
+
+    def choose_starting_positions(self):
+        def good() -> bool:
+            if self.player_side == Character.Side.GOOD:
+                return True
+            else:
+                return False
+        self.new_msg("Choose starting positions. ")
+        if good():
+            spawn_place = "The Shire"
+        else:
+            spawn_place = "Mordor"
+        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
+                          + spawn_place + ". ")
+        # Get player's characters
+        available_to_choose_characters = list(self.human_player.characters)
+        self.add_dialogue("Choose character to spawn in " + spawn_place + ". ")
+        spawn_place_characters = []
+
+        def print_avail_chars(avail_chars):
+            i = 0
+            for guy in avail_chars:
+                self.add_dialogue(str(i) + " : " + guy.name)
+                i += 1
+
+        try:
+            # Make command move button do the spawn for choose_starting_positions()
+            self.button_command_move.clicked.connect(self.command_move_clicked)
+
+            for i in range(4):
+                # 4 charaqcters go in shire/mordor
+                self.add_dialogue(available_to_choose_characters)
+                # Get player's choice
+
+        pass
 
     def handle_game(self):
         """
@@ -550,6 +584,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         for txt in args:
             full_txt += str(txt)
         self.txt_area.setText(self.txt_area.text() + "\n" + full_txt)
+
+    def command_move_spawn_clicked(self):
+        # Note - Not allowing player to choose region, region chosen for him.
+        pass
 
     def command_move_clicked(self):
         # Get selected region

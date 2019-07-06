@@ -30,11 +30,14 @@ class Character(ABC):
 
     def __ne__(self, other): return not self == other
 
-    def see_potential_moves(self):
+    def see_potential_moves(self) -> [[int, int]]:
         """
         See character's potential standard moves based on current region.
         :return: list(int, int) of potential region coordinates available. (None) if no available.
         """
+        if not self.region:
+            # Character not in a region.
+            return None
         potential_regions = []
         if self.side == 1:
             # Good character.

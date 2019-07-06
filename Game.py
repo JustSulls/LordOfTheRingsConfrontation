@@ -50,10 +50,6 @@ class Game:
         
         self._init_characters()
         
-        # Spawn characters
-        # self.player_fellowship.spawn_characters("Cardolan")
-        self.player_sauron.spawn_characters("Eregion")
-        
     def _init_characters(self):
         self.characters.append(self.frodo)
         self.characters.append(self.pippin)
@@ -353,12 +349,12 @@ class Game:
         :return: Success or fail (bool).
         """
         #TODO : implement
-        if player.side == character.side.EVIL:
+        if player.side == Character.Side.EVIL:
             return self.bad_player_turn(character, region)
         else:
             return self.good_player_turn(character, region)
 
-    #TODO: Make this callable by self.player turn()
+    # TODO : Make this callable by self.player turn()
     def good_player_turn(self, character: Character, region: Region):
         """
         Good player chooses which character to move and which region to move to.
