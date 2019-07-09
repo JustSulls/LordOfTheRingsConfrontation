@@ -527,7 +527,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         try:
             # Make command move button do the spawn for choose_starting_positions()
-            self.button_command_move.clicked.connect(self.command_move_clicked)
+            self.button_command_move.clicked.connect(self.command_spawn_move_clicked())
 
             for i in range(4):
                 # 4 charaqcters go in shire/mordor
@@ -585,10 +585,6 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             full_txt += str(txt)
         self.txt_area.setText(self.txt_area.text() + "\n" + full_txt)
 
-    def command_move_spawn_clicked(self):
-        # Note - Not allowing player to choose region, region chosen for him.
-        pass
-
     def command_move_clicked(self):
         # Get selected region
         region_moved_to = self.region_selected
@@ -601,6 +597,11 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         except Exception as e:
             print("Problem during command move clicked func.")
             print(e)
+        pass
+
+    def command_spawn_move_clicked(self, region: Region):
+        # Do region logic here
+        character = self.character_selected
         pass
 
     @property

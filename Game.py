@@ -481,3 +481,6 @@ class Game:
         # Delete region in character
         character.region = None
         self.form.msg(character.name + " has been slain. ")
+
+    def spawn_character(self, character: Character, region: Region):
+        character.move(region)
