@@ -601,6 +601,32 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
     def command_spawn_move_clicked(self, region: Region):
         # Do region logic here
+        def good() -> bool:
+            if self.player_side == Character.Side.GOOD:
+                return True
+            else:
+                return False
+        if good():
+            spawn_place = "The Shire"
+        else:
+            spawn_place = "Mordor"
+        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
+                          + spawn_place + ". ")
+        # Get player's characters to be spawned.
+        available_to_choose_characters = list(self.human_player.characters)
+        self.add_dialogue("Choose character to spawn in " + spawn_place + ". ")
+        spawn_place_characters = []
+
+        def print_available_characters(avail_chars):
+            i = 0
+            for guy in avail_chars:
+                self.add_dialogue(str(i) + " : " + guy.name)
+                i += 1
+
+        try:
+            for i in range(4):
+                print_available_characters(available_to_choose_characters)
+                # TODO : leftoff here... Follow Player.choose_starting_positions where equivalent
         character = self.character_selected
         pass
 
