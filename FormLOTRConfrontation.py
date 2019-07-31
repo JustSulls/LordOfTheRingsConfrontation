@@ -4,6 +4,7 @@ import PySide2.QtGui
 import Game
 import Character
 import Region
+import random
 
 
 class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
@@ -102,7 +103,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
                         self.group_good_character_buttons.addButton(self.button_gimli)
 
                         # Merry button
-                        self.button_merry = PySide2.QtWidgets.QRadioButton("merry")
+                        self.button_merry = PySide2.QtWidgets.QRadioButton("Merry")
                         self.group_good_character_buttons.addButton(self.button_merry)
 
                         # Boromir button
@@ -235,7 +236,6 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
                     self.button_command_move = PySide2.QtWidgets.QPushButton("Command Move")
                     self.button_command_move.setDefault(True)
                     self.button_command_move.setFocus()
-                    # TODO: make sure this is the right way to connect button to func
                     self.button_command_move.clicked.connect(self.command_move_clicked)
                 init_player_commands(self)
             # Create buttons and connect for main window
@@ -365,8 +365,6 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             # Add widgets to layout
             set_up_main_buttons(self)
 
-            # TODO : Connect new command button to yet to be implemented command button func.
-
             def init_start_layouts(self):
                 # QGridLayout for central widget QGraphicsView
                 self.setup_start_grid_layout = PySide2.QtWidgets.QGridLayout()
@@ -423,8 +421,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         # Map of middle earth
         setup_pixmap_middle_earth(self)
 
-        self.current_character = None
-        self.current_region = None
+        self.available_to_spawn_characters = None
 
         self.available_to_choose_characters = None
 
@@ -493,7 +490,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
     def start_game(self):
         self.graphics_scene_main_window()
         # Disable non player buttons (after player chosen)
-        if self.human_player == self.player_fellowship:
+        if self.good():
             # Disable player sauron's character buttons
             for button in self.group_evil_character_buttons.buttons():
                 button.setDisabled(True)
@@ -502,6 +499,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
                 button.setDisabled(True)
         # TODO: Left off here. Game has started and player chosen. Other player's buttons disabled.
         # Have player choose starting positions for his characters
+<<<<<<< HEAD
         self.choose_starting_positions()
         pass
 
@@ -562,7 +560,228 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
                 self.add_dialogue(str(i) + " : " + guy.name)
                 i += 1
 
+=======
+        # self.choose_starting_positions()
+        self.temp()
+
+    def do_enemy_spawn(self):
+        """
+        Pick random enemy character and spawn in appropriate region until no characters left.
+        :return:
+        """
+        spawnable_characters = list(self.computer_player.characters)
+        for i in range(len(spawnable_characters)):
+            # Generate random number between 0 - character list length
+            randint = random.randint(0, len(spawnable_characters) - 1)
+            randcharacter = spawnable_characters[randint]
+            # Put that character in spawn place until spawn place full
+            spawn_region = self.get_enemy_spawn_region()
+            try:
+                self.game.spawn_character(randcharacter, spawn_region)
+                spawnable_characters.remove(randcharacter)
+            except Exception as ex:
+                print("Error during do enemy spawn()" + ex.__str__())
+        # Done, start game with sauron player's turn.
+        self.do_ai_turn()
+
+    def do_ai_turn(self):
+        # No intelligence...
+        # Pick random character
+        chooseable_characters = list(self.computer_player.characters)
+        chosen_character = chooseable_characters[random.randint(0, len(chooseable_characters) - 1)]
+        # Pick random valid region
+        coordinates = chosen_character.see_potential_moves()
+        rand_choice = random.randint(0, len(coordinates) - 1)
+        choice = coordinates[rand_choice]
+        chosen_region = self.game.map.positions[tuple(choice)]
+        # Do move
+        try:
+            success = self.computer_player.move_character(chosen_character, chosen_region)
+        except Exception as ex:
+            print("Error during do ai turn()" + ex.__str__())
+        # If AI entered region with enemy, do battle.
+        # If region contains more than one enemey, select one randomly
+
+
+
+    def prompt_user_which_enemy_to_battle(self, *args: str) -> str:
+        """
+        Takes enemy character names as parameters and prompts user to choose which to battle.
+        :param args: String character names to choose from to battle.
+        :return: Name of character chosen to battle.
+        """
+        # dialog = PySide2.QtWidgets.QDialog()
+        # layout = PySide2.QtWidgets.QHBoxLayout()
+        # for name in args:
+        #     layout.addWidget(PySide2.QtWidgets.QRadioButton(name))
+        # ok = PySide2.QtWidgets.QPushButton("Ok")
+        # layout.addWidget(ok)
+        # dialog.setLayout(layout)
+        # ok.clicked.connect(dialog.accept)
+        # returned = dialog.exec_()
+        # print("Great successs!")
+        def test_dialog_ok(self):
+            """Test we can click OK."""
+
+            button = self.dialog.button_box.button(PySide2.QtWidgets.QDialogButtonBox.Ok)
+            button.click()
+            result = self.dialog.result()
+            self.assertEqual(result, PySide2.QtWidgets.QDialog.Accepted)
+        test_dialog_ok(self)
+>>>>>>> 0ca54aee1828a171cdce53276069ddf1fda26edb
         pass
+
+    def good(self) -> bool:
+        if self.player_side == Character.Side.GOOD:
+            return True
+        else:
+            return False
+
+    def print_avail_chars(self, avail_chars):
+        i = 0
+        for guy in avail_chars:
+            self.add_dialogue(str(i) + " : " + guy.name)
+            i += 1
+
+    def temp(self):
+        self.do_enemy_spawn()
+
+    def choose_starting_positions(self):
+        self.new_msg("Choose starting positions. ")
+        spawn_place = self.get_spawn_region()
+        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
+                          + spawn_place.name + ". ")
+        # Disconnect original button command move func call
+        self.button_command_move.clicked.disconnect()
+        # Make command move button do the spawn for choose_starting_positions()
+        self.button_command_move.clicked.connect(self.command_spawn_move_clicked)
+        # Update button's name
+        self.button_command_move.setText("Spawn Character")
+        # Disable Region buttons
+        for button in self.group_region_buttons.buttons():
+            button.setDisabled(True)
+
+        # Set available to choose characters list to all player's characters to be spawned.
+        self.available_to_spawn_characters = self.human_player.characters
+
+    def get_spawn_region(self) -> Region:
+        """
+        Returns spawnable region based on player and current game map. None if no valid regions
+        left/spawn phase complete.
+        :return: Region to be spawned. None if spawning complete for human player.
+        """
+        if self.good():
+            if self.game.map.regions["The Shire"].character_count < 4:
+                return self.game.map.regions["The Shire"]
+            elif self.game.map.regions["Arthedain"].character_count < 1:
+                return self.game.map.regions["Arthedain"]
+            elif self.game.map.regions["Cardolan"].character_count < 1:
+                return self.game.map.regions["Cardolan"]
+            elif self.game.map.regions["Endewaith"].character_count < 1:
+                return self.game.map.regions["Endewaith"]
+            elif self.game.map.regions["Eregion"].character_count < 1:
+                return self.game.map.regions["Eregion"]
+            elif self.map.regions["Rhudaur"].character_count < 1:
+                return self.map.regions["Rhudaur"]
+                # Done
+        else:
+            if self.game.map.regions["Mordor"].character_count < 4:
+                return self.game.map.regions["Mordor"]
+            elif self.game.map.regions["Gondor"].character_count < 1:
+                return self.game.map.regions["Gondor"]
+            elif self.game.map.regions["Dagorlad"].character_count < 1:
+                return self.game.map.regions["Dagorlad"]
+            elif self.game.map.regions["Fangorn"].character_count < 1:
+                return self.game.map.regions["Fangorn"]
+            elif self.game.map.regions["Mirkwood"].character_count < 1:
+                return self.game.map.regions["Mirkwood"]
+            elif self.map.regions["Rohan"].character_count < 1:
+                return self.map.regions["Rohan"]
+                # Done
+
+    def get_enemy_spawn_region(self) -> Region:
+        """
+        Returns enemy spawnable region based on player and current game map. None if no valid regions
+        left/spawn phase complete.
+        :return: Region to be spawned. None if spawning complete for human player.
+        """
+        if not self.good():
+            if self.game.map.regions["The Shire"].character_count < 4:
+                return self.game.map.regions["The Shire"]
+            elif self.game.map.regions["Arthedain"].character_count < 1:
+                return self.game.map.regions["Arthedain"]
+            elif self.game.map.regions["Cardolan"].character_count < 1:
+                return self.game.map.regions["Cardolan"]
+            elif self.game.map.regions["Endewaith"].character_count < 1:
+                return self.game.map.regions["Endewaith"]
+            elif self.game.map.regions["Eregion"].character_count < 1:
+                return self.game.map.regions["Eregion"]
+            elif self.map.regions["Rhudaur"].character_count < 1:
+                return self.map.regions["Rhudaur"]
+                # Done
+        else:
+            if self.game.map.regions["Mordor"].character_count < 4:
+                return self.game.map.regions["Mordor"]
+            elif self.game.map.regions["Gondor"].character_count < 1:
+                return self.game.map.regions["Gondor"]
+            elif self.game.map.regions["Dagorlad"].character_count < 1:
+                return self.game.map.regions["Dagorlad"]
+            elif self.game.map.regions["Fangorn"].character_count < 1:
+                return self.game.map.regions["Fangorn"]
+            elif self.game.map.regions["Mirkwood"].character_count < 1:
+                return self.game.map.regions["Mirkwood"]
+            elif self.map.regions["Rohan"].character_count < 1:
+                return self.map.regions["Rohan"]
+                # Done
+
+    def command_spawn_move_clicked(self):
+        # Get region to spawn to
+        spawn_region = self.get_spawn_region()
+
+        # Get player's character choice
+        character_choice = self.character_selected
+
+        # Validate
+        if spawn_region is not None and character_choice.region is None:
+            # Valid choices probably. # TODO: Confirm this works.
+            # Do spawn
+            try:
+                self.game.spawn_character(character_choice, spawn_region)
+                self.new_msg(character_choice.name + " spawned at " + spawn_region.name + ". ")
+                # Update character list, call next phase if done choosing
+                self.available_to_spawn_characters.remove(character_choice)
+            except Exception as ex:
+                print("Invalid choice. Need to implement error handling during spawn choices. " + ex.__str__())
+        else:
+            # Not valid choice, try again
+            self.new_msg("Invalid choice... try again.")
+
+        if self.good():
+            # Disable button for character already chosen.
+            for button_character in self.group_good_character_buttons.buttons():
+                if button_character.text() == character_choice.name:
+                    button_character.setDisabled(True)
+                    # TODO: Move highlighted radio button to non disabled button.
+        else:
+            for button_character in self.group_evil_character_buttons.buttons():
+                if button_character.text() == character_choice.name:
+                    button_character.setDisabled(True)
+
+        if not self.available_to_spawn_characters:
+            # Spawning complete
+            # No characters left in available to spawn characters list.
+            # Connect normal move button
+            self.button_command_move.clicked.disconnect()
+            # Make command move button do the regular move func
+            self.button_command_move.clicked.connect(self.command_move_clicked)
+            self.do_enemy_spawn()
+        else:
+            # Do prompt for next character to spawn to region
+            spawn_place = self.get_spawn_region()
+            self.add_dialogue("Choose character to spawn to "
+                              + spawn_place.name + ". ")
+        self.hide()
+        self.show()
 
     def handle_game(self):
         """
@@ -575,12 +794,8 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         choose_player()
 
-    def msg(self, *args: str):
-        txt = self.text_box.text()
-        txt += "\n"
-        for arg in args:
-            txt += arg
-        self.text_box.setText(txt)
+    def msg(self, txt):
+        self.add_dialogue(txt)
 
     def msg_start(self, *args: str):
         txt = self.text_box_start.text()
@@ -611,7 +826,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         full_txt = ''
         for txt in args:
             full_txt += str(txt)
-        self.txt_area.setText(self.txt_area.text() + "\n" + full_txt)
+        self.text_box.setText(self.text_box.text() + "\n" + full_txt)
 
     def command_move_clicked(self):
         # Get selected region
@@ -637,6 +852,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
     @property
     def character_selected(self) -> Character:
+        """
+        Gets Character from good/evil_character selected property.
+        :return: Character selected depending on side good/evil.
+        """
         if Character.Side.GOOD == self.player_side:
             return self.good_character_selected
         elif Character.Side.EVIL == self.player_side:

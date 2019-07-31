@@ -32,7 +32,7 @@ class Player:
         for character in self.characters:
             self.map.place_character_on_region(character, spawn_place)
 
-    def choose_card(self):
+    def choose_card(self, ai: bool):
         print(self.name + " choosing strength card. ")
         i = 0
         for card in self.strength_cards:
