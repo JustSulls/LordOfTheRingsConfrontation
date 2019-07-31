@@ -426,6 +426,8 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.current_character = None
         self.current_region = None
 
+        self.available_to_choose_characters = None
+
         self.graphics_scene_start_window()
 
     def graphics_scene_start_window(self):
@@ -500,39 +502,65 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
                 button.setDisabled(True)
         # TODO: Left off here. Game has started and player chosen. Other player's buttons disabled.
         # Have player choose starting positions for his characters
+        self.choose_starting_positions()
+        pass
 
     def choose_starting_positions(self):
-        def good() -> bool:
-            if self.player_side == Character.Side.GOOD:
-                return True
-            else:
-                return False
-        self.new_msg("Choose starting positions. ")
-        if good():
-            spawn_place = "The Shire"
-        else:
-            spawn_place = "Mordor"
-        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
-                          + spawn_place + ". ")
-        # Get player's characters
-        available_to_choose_characters = list(self.human_player.characters)
-        self.add_dialogue("Choose character to spawn in " + spawn_place + ". ")
-        spawn_place_characters = []
+        """
+        Handles the player selecting starting positions for his characters.
+        :return:
+        """
+        # Make command move button do the spawn for choose_starting_positions()
+        self.button_command_move.clicked.connect(self.command_spawn_move_clicked())
 
+        # Characters to spawn start as list of characters from player.
+        self.available_to_choose_characters = list(self.human_player.characters)
+
+        self.new_msg("Choose starting positions. ")
+        pass
+
+    def get_region_to_spawn(self) -> Region:
+        if self.good():
+            spawn_places = ["The Shire", "Arthedain", "Cardolan", "Endewaith", "Eregion", "Rhudaur"]
+            for i in range(len(spawn_places)):
+                region = self.game.map.regions[spawn_places[i]]
+                # Rule for The Shire, 4 spawn here.
+                if region.name == "The Shire":
+                    if region.character_count < 4:
+                        return region
+                    else:
+                        # The Shire full
+                        pass
+                # Rule for every other region, 1 spawn.
+                else:
+                    if region.character_count > 0:
+                        # Contains full character.
+                        pass
+                    else:
+                        # Region spawnable
+                        return region
+
+    # Returns True if Good, False if Evil.
+    def good(self) -> bool:
+        if self.player_side == Character.Side.GOOD:
+            return True
+        else:
+            return False
+
+    def command_spawn_move_clicked(self):
+        # Region to spawn to
+        region = self.get_region_to_spawn()
+        # Character to spawn
+        character = self.character_selected
+
+        # Check validity of choices.
+        
+        # Prints characters left to choose from to text box.
         def print_avail_chars(avail_chars):
             i = 0
             for guy in avail_chars:
                 self.add_dialogue(str(i) + " : " + guy.name)
                 i += 1
-
-        try:
-            # Make command move button do the spawn for choose_starting_positions()
-            self.button_command_move.clicked.connect(self.command_spawn_move_clicked())
-
-            for i in range(4):
-                # 4 charaqcters go in shire/mordor
-                self.add_dialogue(available_to_choose_characters)
-                # Get player's choice
 
         pass
 
@@ -592,42 +620,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         moving_character = self.character_selected
         # Make move happen
         try:
-            # TODO : Leftoff here, make sure this call works
             self.game.player_turn(self.human_player, moving_character, region_moved_to)
         except Exception as e:
             print("Problem during command move clicked func.")
             print(e)
-        pass
-
-    def command_spawn_move_clicked(self, region: Region):
-        # Do region logic here
-        def good() -> bool:
-            if self.player_side == Character.Side.GOOD:
-                return True
-            else:
-                return False
-        if good():
-            spawn_place = "The Shire"
-        else:
-            spawn_place = "Mordor"
-        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
-                          + spawn_place + ". ")
-        # Get player's characters to be spawned.
-        available_to_choose_characters = list(self.human_player.characters)
-        self.add_dialogue("Choose character to spawn in " + spawn_place + ". ")
-        spawn_place_characters = []
-
-        def print_available_characters(avail_chars):
-            i = 0
-            for guy in avail_chars:
-                self.add_dialogue(str(i) + " : " + guy.name)
-                i += 1
-
-        try:
-            for i in range(4):
-                print_available_characters(available_to_choose_characters)
-                # TODO : leftoff here... Follow Player.choose_starting_positions where equivalent
-        character = self.character_selected
         pass
 
     @property

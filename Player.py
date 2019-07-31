@@ -207,4 +207,3 @@ class Player:
             front_region_choices(spawn_places[3])
             # Rohan
             front_region_choices(spawn_places[4])
-
