@@ -32,22 +32,24 @@ class Player:
         for character in self.characters:
             self.map.place_character_on_region(character, spawn_place)
 
-    def choose_card(self, ai: bool):
-        print(self.name + " choosing strength card. ")
-        i = 0
-        for card in self.strength_cards:
-            print(str(i) + " : " + "Strength card (" + str(card) + ").")
-            i += 1
-        try:
-            choice = int(input("Choose a strength card. "))
-        except Exception as ex:
-            print(ex.__str__)
-
-        card = self.strength_cards[choice]
-        # Discard chosen card
-        self.strength_cards.remove(card)
-        print("Chosen strength card (" + str(card.strength) + ") for player (" + self.name + "). ")
-        return card.strength
+    # def choose_card(self, ai: bool):
+    #     if ai:
+    #     #TODO: leftoff here. Make this different for ai/human
+    #     print(self.name + " choosing strength card. ")
+    #     i = 0
+    #     for card in self.strength_cards:
+    #         print(str(i) + " : " + "Strength card (" + str(card) + ").")
+    #         i += 1
+    #     try:
+    #         choice = int(input("Choose a strength card. "))
+    #     except Exception as ex:
+    #         print(ex.__str__)
+    #
+    #     card = self.strength_cards[choice]
+    #     # Discard chosen card
+    #     self.strength_cards.remove(card)
+    #     print("Chosen strength card (" + str(card.strength) + ") for player (" + self.name + "). ")
+    #     return card.strength
 
     def move_character(self, character: Character, region: Map.Region) -> bool:
         """
@@ -116,6 +118,11 @@ class Player:
     @staticmethod
     def spawn(character: Character, region: Map.Region):
         character.move(region)
+
+    @property
+    def player_side(self) -> Character.Side:
+        if self.characters:
+            return self.characters[0].side
 
     def choose_starting_positions(self):
         def good()-> bool:

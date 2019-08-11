@@ -11,9 +11,6 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
     def __init__(self):
         PySide2.QtWidgets.QMainWindow.__init__(self)
-        self.human_player = None
-        self.computer_player = None
-
         # Button group good characters
         self.group_good_character_buttons = PySide2.QtWidgets.QButtonGroup()
         # Button group good characters
@@ -71,83 +68,81 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             def init_main_buttons(self):
                 def init_character_buttons(self):
                     def init_good_character_buttons(self):
-                        # TODO: Implement custom radiobutton/abstraction class and include
-                        #  each appropriate character from Game
                         # Frodo button
                         self.button_frodo = PySide2.QtWidgets.QRadioButton("Frodo")
                         self.button_frodo.setChecked(True)
-                        self.group_good_character_buttons.addButton(self.button_frodo)
+                        self.group_good_character_buttons.addButton(self.button_frodo, 1)
 
                         # Pippin button
                         self.button_pippin = PySide2.QtWidgets.QRadioButton("Pippin")
-                        self.group_good_character_buttons.addButton(self.button_pippin)
+                        self.group_good_character_buttons.addButton(self.button_pippin, 2)
 
                         # Gandalf button
                         self.button_gandalf = PySide2.QtWidgets.QRadioButton("Gandalf")
-                        self.group_good_character_buttons.addButton(self.button_gandalf)
+                        self.group_good_character_buttons.addButton(self.button_gandalf, 3)
 
                         # Sam button
                         self.button_sam = PySide2.QtWidgets.QRadioButton("Sam")
-                        self.group_good_character_buttons.addButton(self.button_sam)
+                        self.group_good_character_buttons.addButton(self.button_sam, 4)
 
                         # Legolas button
                         self.button_legolas = PySide2.QtWidgets.QRadioButton("Legolas")
-                        self.group_good_character_buttons.addButton(self.button_legolas)
+                        self.group_good_character_buttons.addButton(self.button_legolas, 5)
 
                         # Aragorn button
                         self.button_aragorn = PySide2.QtWidgets.QRadioButton("Aragorn")
-                        self.group_good_character_buttons.addButton(self.button_aragorn)
+                        self.group_good_character_buttons.addButton(self.button_aragorn, 6)
 
                         # Gimli button
                         self.button_gimli = PySide2.QtWidgets.QRadioButton("Gimli")
-                        self.group_good_character_buttons.addButton(self.button_gimli)
+                        self.group_good_character_buttons.addButton(self.button_gimli, 7)
 
                         # Merry button
                         self.button_merry = PySide2.QtWidgets.QRadioButton("Merry")
-                        self.group_good_character_buttons.addButton(self.button_merry)
+                        self.group_good_character_buttons.addButton(self.button_merry, 8)
 
                         # Boromir button
                         self.button_boromir = PySide2.QtWidgets.QRadioButton("Boromir")
-                        self.group_good_character_buttons.addButton(self.button_boromir)
+                        self.group_good_character_buttons.addButton(self.button_boromir, 9)
                     # Create good character push buttons
                     init_good_character_buttons(self)
 
                     def init_evil_character_buttons(self):
                         # Orcs button
                         self.button_orcs = PySide2.QtWidgets.QRadioButton("Orcs")
-                        self.group_evil_character_buttons.addButton(self.button_orcs)
+                        self.group_evil_character_buttons.addButton(self.button_orcs, 1)
 
                         # Shelob button
                         self.button_shelob = PySide2.QtWidgets.QRadioButton("Shelob")
-                        self.group_evil_character_buttons.addButton(self.button_shelob)
+                        self.group_evil_character_buttons.addButton(self.button_shelob, 2)
 
                         # Saruman button
                         self.button_saruman = PySide2.QtWidgets.QRadioButton("Saruman")
-                        self.group_evil_character_buttons.addButton(self.button_saruman)
+                        self.group_evil_character_buttons.addButton(self.button_saruman, 3)
 
                         # Flying Nazgul button
                         self.button_flying_nazgul = PySide2.QtWidgets.QRadioButton("Flying Nazgul")
-                        self.group_evil_character_buttons.addButton(self.button_flying_nazgul)
+                        self.group_evil_character_buttons.addButton(self.button_flying_nazgul, 4)
 
                         # Balrog button
                         self.button_balrog = PySide2.QtWidgets.QRadioButton("Balrog")
-                        self.group_evil_character_buttons.addButton(self.button_balrog)
+                        self.group_evil_character_buttons.addButton(self.button_balrog, 5)
 
                         # Warg button
                         self.button_warg = PySide2.QtWidgets.QRadioButton("Warg")
-                        self.group_evil_character_buttons.addButton(self.button_warg)
+                        self.group_evil_character_buttons.addButton(self.button_warg, 6)
 
                         # Black rider button
                         self.button_black_rider = PySide2.QtWidgets.QRadioButton("Black Rider")
-                        self.group_evil_character_buttons.addButton(self.button_black_rider)
+                        self.group_evil_character_buttons.addButton(self.button_black_rider, 7)
 
                         # Witch King button
                         self.button_witch_king = PySide2.QtWidgets.QRadioButton("Witch King")
-                        self.group_evil_character_buttons.addButton(self.button_witch_king)
+                        self.group_evil_character_buttons.addButton(self.button_witch_king, 8)
 
                         # Cave troll button
                         self.button_cave_troll = PySide2.QtWidgets.QRadioButton("Cave Troll")
-                        self.group_evil_character_buttons.addButton(self.button_cave_troll)
+                        self.group_evil_character_buttons.addButton(self.button_cave_troll, 9)
                     # Create evil character push buttons
                     init_evil_character_buttons(self)
                 # Create character push buttons
@@ -423,9 +418,161 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         self.available_to_spawn_characters = None
 
-        self.available_to_choose_characters = None
-
         self.graphics_scene_start_window()
+
+    @property
+    def character_selected(self) -> Character:
+        """
+        Gets Character from good/evil_character selected property.
+        :return: Character selected depending on side good/evil.
+        """
+        if Character.Side.GOOD == self.game.player_human_side:
+            return self.good_character_selected
+        elif Character.Side.EVIL == self.game.player_human_side:
+            return self.evil_character_selected
+        else:
+            return None
+
+    @property
+    def evil_character_selected(self) -> Character:
+        # Currently selected evil character radio button
+        selected_button = self.group_evil_character_buttons.checkedButton()
+        # String name of character
+        character_name = selected_button.text()
+        # Get character
+        return self.game.get_character(character_name)
+
+    @property
+    def good_character_selected(self) -> Character:
+        # Currently selected good character radio button
+        selected_button = self.group_good_character_buttons.checkedButton()
+        # String name of character
+        character_name = selected_button.text()
+        # Get character
+        return self.game.get_character(character_name)
+
+    @property
+    def player_human_side_fellowship(self) -> bool:
+        if self.game.player_human.player_side == Character.Side.GOOD:
+            return True
+        else:
+            return False
+
+    @property
+    def player_human_side_sauron(self) -> bool:
+        if self.game.player_human.player_side == Character.Side.EVIL:
+            return True
+        else:
+            return False
+
+    @property
+    def region_selected(self) -> Region:
+        # Currently selected region radio button
+        selected_region = self.group_region_buttons.checkedButton()
+        # String name of character
+        region_name = selected_region.text()
+        # Get region
+        return self.game.get_region(region_name)
+
+    def add_dialogue(self, *args):
+        full_txt = ''
+        for txt in args:
+            full_txt += str(txt)
+        self.text_box.setText(self.text_box.text() + "\n" + full_txt)
+
+    def choose_starting_positions(self):
+        self.new_msg("Choose starting positions. ")
+        spawn_place = self.game.get_spawn_region()
+        self.add_dialogue(self.game.player_human.name + " chooses four of his characters and places them in "
+                          + spawn_place.name + ". ")
+        # Disconnect original button command move func call
+        self.button_command_move.clicked.disconnect()
+        # Make command move button do the spawn for choose_starting_positions()
+        self.button_command_move.clicked.connect(self.command_spawn_move_clicked)
+        # Update button's name
+        self.button_command_move.setText("Spawn Character")
+        # Disable Region buttons
+        for button in self.group_region_buttons.buttons():
+            button.setDisabled(True)
+
+        # Set available to choose characters list to all player's characters to be spawned.
+        self.available_to_spawn_characters = self.game.player_human.characters
+
+    def command_move_clicked(self):
+        # Get selected region
+        region_moved_to = self.region_selected
+        # Get selected character
+        moving_character = self.character_selected
+        # Make move happen
+        try:
+            self.game.player_turn(self.game.player_human, moving_character, region_moved_to)
+        except Exception as e:
+            print("Problem during command move clicked func.")
+            print(e)
+        pass
+
+    def command_spawn_move_clicked(self):
+        # Get region to spawn to
+        spawn_region = self.game.get_spawn_region()
+
+        # Get player's character choice
+        character_choice = self.character_selected
+
+        # Validate
+        if spawn_region is not None and character_choice.region is None:
+            # Valid choices probably. # TODO: Confirm this works.
+            # Do spawn
+            try:
+                self.game.spawn_character(character_choice, spawn_region)
+                self.new_msg(character_choice.name + " spawned at " + spawn_region.name + ". ")
+                # Update character list, call next phase if done choosing
+                self.available_to_spawn_characters.remove(character_choice)
+            except Exception as ex:
+                print("Invalid choice. Need to implement error handling during spawn choices. " + ex.__str__())
+        else:
+            # Not valid choice, try again
+            self.new_msg("Invalid choice... try again.")
+
+        # Disable button for character already chosen.
+        if self.player_human_side_sauron:
+            for button_character in self.group_evil_character_buttons.buttons():
+                if button_character.text() == character_choice.name:
+                    button_character.setDisabled(True)
+                    self.highlight_next_available_character()
+        else:
+            for button_character in self.group_good_character_buttons.buttons():
+                if button_character.text() == character_choice.name:
+                    button_character.setDisabled(True)
+                    self.highlight_next_available_character()
+
+        # Check if spawning complete
+        if not self.available_to_spawn_characters:
+            # Spawning complete
+            # No characters left in available to spawn characters list.
+            self.button_command_move.clicked.disconnect()
+            # Make command move button do the regular move function
+            self.button_command_move.clicked.connect(self.command_move_clicked)
+            self.button_command_move.setText("Move")
+            # Next phase
+            self.game.do_enemy_ai_spawn()
+            # After all characters now spawned, may start game.
+            self.start_game()
+        else:
+            # Do prompt for next character to spawn to region
+            spawn_place = self.game.get_spawn_region()
+            self.add_dialogue("Choose character to spawn to "
+                              + spawn_place.name + ". ")
+        # Refresh screen
+        self.hide()
+        self.show()
+
+    def disable_non_player_buttons(self):
+        if self.game.player_computer_side == Character.Side.GOOD:
+            for button in self.group_good_character_buttons.buttons():
+                button.setDisabled(True)
+        if self.game.player_computer_side == Character.Side.EVIL:
+            for button in self.group_evil_character_buttons.buttons():
+                button.setDisabled(True)
 
     def graphics_scene_start_window(self):
         """
@@ -450,7 +597,8 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.resize(PySide2.QtWidgets.QDesktopWidget.availableGeometry(
             PySide2.QtWidgets.QDesktopWidget()).size() * 0.5)
 
-        self.handle_game()
+        self.msg_start("Welcome to The Lord Of the Rings Confrontation.")
+        self.msg_start("Select your side: Good, Evil")
 
         self.show()
         
@@ -487,122 +635,38 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
 
         self.show()
 
-    def start_game(self):
-        self.graphics_scene_main_window()
-        # Disable non player buttons (after player chosen)
-        if self.good():
-            # Disable player sauron's character buttons
-            for button in self.group_evil_character_buttons.buttons():
-                button.setDisabled(True)
+    def highlight_next_available_character(self):
+        if self.player_human_side_fellowship:
+            for btn in self.group_good_character_buttons.buttons():
+                if btn.isEnabled():
+                    btn.toggle()
+                    break
         else:
-            for button in self.group_good_character_buttons.buttons():
-                button.setDisabled(True)
-        # TODO: Left off here. Game has started and player chosen. Other player's buttons disabled.
-        # Have player choose starting positions for his characters
-<<<<<<< HEAD
-        self.choose_starting_positions()
+            for btn in self.group_evil_character_buttons.buttons():
+                if btn.isEnabled():
+                    btn.toggle()
+                    break
+
+    def msg_start(self, *args: str):
+        txt = self.text_box_start.text()
+        txt += "\n"
+        for arg in args:
+            txt += arg
+        self.text_box_start.setText(txt)
+
+    def new_msg(self, *args: str):
+        txt = ""
+        for arg in args:
+            txt += arg
+        self.text_box.setText(txt)
+
+    def prompt_user_which_card_to_choose(self, cards) -> int:
+        dialog = PySide2.QtWidgets.QDialog()
+        layout = PySide2.QtWidgets.QVBoxLayout()
+        for card in cards:
+            layout.addWidget(PySide2.QtWidgets.QPushButton(card.__str__()))
+        dialog.setLayout(layout)
         pass
-
-    def choose_starting_positions(self):
-        """
-        Handles the player selecting starting positions for his characters.
-        :return:
-        """
-        # Make command move button do the spawn for choose_starting_positions()
-        self.button_command_move.clicked.connect(self.command_spawn_move_clicked())
-
-        # Characters to spawn start as list of characters from player.
-        self.available_to_choose_characters = list(self.human_player.characters)
-
-        self.new_msg("Choose starting positions. ")
-        pass
-
-    def get_region_to_spawn(self) -> Region:
-        if self.good():
-            spawn_places = ["The Shire", "Arthedain", "Cardolan", "Endewaith", "Eregion", "Rhudaur"]
-            for i in range(len(spawn_places)):
-                region = self.game.map.regions[spawn_places[i]]
-                # Rule for The Shire, 4 spawn here.
-                if region.name == "The Shire":
-                    if region.character_count < 4:
-                        return region
-                    else:
-                        # The Shire full
-                        pass
-                # Rule for every other region, 1 spawn.
-                else:
-                    if region.character_count > 0:
-                        # Contains full character.
-                        pass
-                    else:
-                        # Region spawnable
-                        return region
-
-    # Returns True if Good, False if Evil.
-    def good(self) -> bool:
-        if self.player_side == Character.Side.GOOD:
-            return True
-        else:
-            return False
-
-    def command_spawn_move_clicked(self):
-        # Region to spawn to
-        region = self.get_region_to_spawn()
-        # Character to spawn
-        character = self.character_selected
-
-        # Check validity of choices.
-        
-        # Prints characters left to choose from to text box.
-        def print_avail_chars(avail_chars):
-            i = 0
-            for guy in avail_chars:
-                self.add_dialogue(str(i) + " : " + guy.name)
-                i += 1
-
-=======
-        # self.choose_starting_positions()
-        self.temp()
-
-    def do_enemy_spawn(self):
-        """
-        Pick random enemy character and spawn in appropriate region until no characters left.
-        :return:
-        """
-        spawnable_characters = list(self.computer_player.characters)
-        for i in range(len(spawnable_characters)):
-            # Generate random number between 0 - character list length
-            randint = random.randint(0, len(spawnable_characters) - 1)
-            randcharacter = spawnable_characters[randint]
-            # Put that character in spawn place until spawn place full
-            spawn_region = self.get_enemy_spawn_region()
-            try:
-                self.game.spawn_character(randcharacter, spawn_region)
-                spawnable_characters.remove(randcharacter)
-            except Exception as ex:
-                print("Error during do enemy spawn()" + ex.__str__())
-        # Done, start game with sauron player's turn.
-        self.do_ai_turn()
-
-    def do_ai_turn(self):
-        # No intelligence...
-        # Pick random character
-        chooseable_characters = list(self.computer_player.characters)
-        chosen_character = chooseable_characters[random.randint(0, len(chooseable_characters) - 1)]
-        # Pick random valid region
-        coordinates = chosen_character.see_potential_moves()
-        rand_choice = random.randint(0, len(coordinates) - 1)
-        choice = coordinates[rand_choice]
-        chosen_region = self.game.map.positions[tuple(choice)]
-        # Do move
-        try:
-            success = self.computer_player.move_character(chosen_character, chosen_region)
-        except Exception as ex:
-            print("Error during do ai turn()" + ex.__str__())
-        # If AI entered region with enemy, do battle.
-        # If region contains more than one enemey, select one randomly
-
-
 
     def prompt_user_which_enemy_to_battle(self, *args: str) -> str:
         """
@@ -618,7 +682,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         # layout.addWidget(ok)
         # dialog.setLayout(layout)
         # ok.clicked.connect(dialog.accept)
-        # returned = dialog.exec_()
+        # returned = dialog.exec_()sss
         # print("Great successs!")
         def test_dialog_ok(self):
             """Test we can click OK."""
@@ -628,264 +692,33 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             result = self.dialog.result()
             self.assertEqual(result, PySide2.QtWidgets.QDialog.Accepted)
         test_dialog_ok(self)
->>>>>>> 0ca54aee1828a171cdce53276069ddf1fda26edb
         pass
 
-    def good(self) -> bool:
-        if self.player_side == Character.Side.GOOD:
-            return True
-        else:
-            return False
+    def select_evil_clicked(self):
+        self.game.player_human = self.game.player_sauron
+        self.game.player_computer = self.game.player_fellowship
+        self.new_msg("Evil player chosen. ")
+        self.setup_game()
 
-    def print_avail_chars(self, avail_chars):
-        i = 0
-        for guy in avail_chars:
-            self.add_dialogue(str(i) + " : " + guy.name)
-            i += 1
+    def select_good_clicked(self):
+        self.game.player_human = self.game.player_fellowship
+        self.game.player_computer = self.game.player_sauron
+        self.new_msg("Good player chosen. ")
+        self.setup_game()
+
+    def setup_game(self):
+        self.graphics_scene_main_window()
+        # Disable non player buttons (done after player chosen)
+        self.disable_non_player_buttons()
+        # Have player choose starting positions for his characters
+        self.choose_starting_positions()
+
+    def start_game(self):
+        # Game starts with AI player's turn
+        self.new_msg("Game starts with AI player's turn.")
+        # TODO: leftoff here
+        self.game.do_ai_turn()
+        pass
 
     def temp(self):
         self.do_enemy_spawn()
-
-    def choose_starting_positions(self):
-        self.new_msg("Choose starting positions. ")
-        spawn_place = self.get_spawn_region()
-        self.add_dialogue(self.human_player.name + " chooses four of his characters and places them in "
-                          + spawn_place.name + ". ")
-        # Disconnect original button command move func call
-        self.button_command_move.clicked.disconnect()
-        # Make command move button do the spawn for choose_starting_positions()
-        self.button_command_move.clicked.connect(self.command_spawn_move_clicked)
-        # Update button's name
-        self.button_command_move.setText("Spawn Character")
-        # Disable Region buttons
-        for button in self.group_region_buttons.buttons():
-            button.setDisabled(True)
-
-        # Set available to choose characters list to all player's characters to be spawned.
-        self.available_to_spawn_characters = self.human_player.characters
-
-    def get_spawn_region(self) -> Region:
-        """
-        Returns spawnable region based on player and current game map. None if no valid regions
-        left/spawn phase complete.
-        :return: Region to be spawned. None if spawning complete for human player.
-        """
-        if self.good():
-            if self.game.map.regions["The Shire"].character_count < 4:
-                return self.game.map.regions["The Shire"]
-            elif self.game.map.regions["Arthedain"].character_count < 1:
-                return self.game.map.regions["Arthedain"]
-            elif self.game.map.regions["Cardolan"].character_count < 1:
-                return self.game.map.regions["Cardolan"]
-            elif self.game.map.regions["Endewaith"].character_count < 1:
-                return self.game.map.regions["Endewaith"]
-            elif self.game.map.regions["Eregion"].character_count < 1:
-                return self.game.map.regions["Eregion"]
-            elif self.map.regions["Rhudaur"].character_count < 1:
-                return self.map.regions["Rhudaur"]
-                # Done
-        else:
-            if self.game.map.regions["Mordor"].character_count < 4:
-                return self.game.map.regions["Mordor"]
-            elif self.game.map.regions["Gondor"].character_count < 1:
-                return self.game.map.regions["Gondor"]
-            elif self.game.map.regions["Dagorlad"].character_count < 1:
-                return self.game.map.regions["Dagorlad"]
-            elif self.game.map.regions["Fangorn"].character_count < 1:
-                return self.game.map.regions["Fangorn"]
-            elif self.game.map.regions["Mirkwood"].character_count < 1:
-                return self.game.map.regions["Mirkwood"]
-            elif self.map.regions["Rohan"].character_count < 1:
-                return self.map.regions["Rohan"]
-                # Done
-
-    def get_enemy_spawn_region(self) -> Region:
-        """
-        Returns enemy spawnable region based on player and current game map. None if no valid regions
-        left/spawn phase complete.
-        :return: Region to be spawned. None if spawning complete for human player.
-        """
-        if not self.good():
-            if self.game.map.regions["The Shire"].character_count < 4:
-                return self.game.map.regions["The Shire"]
-            elif self.game.map.regions["Arthedain"].character_count < 1:
-                return self.game.map.regions["Arthedain"]
-            elif self.game.map.regions["Cardolan"].character_count < 1:
-                return self.game.map.regions["Cardolan"]
-            elif self.game.map.regions["Endewaith"].character_count < 1:
-                return self.game.map.regions["Endewaith"]
-            elif self.game.map.regions["Eregion"].character_count < 1:
-                return self.game.map.regions["Eregion"]
-            elif self.map.regions["Rhudaur"].character_count < 1:
-                return self.map.regions["Rhudaur"]
-                # Done
-        else:
-            if self.game.map.regions["Mordor"].character_count < 4:
-                return self.game.map.regions["Mordor"]
-            elif self.game.map.regions["Gondor"].character_count < 1:
-                return self.game.map.regions["Gondor"]
-            elif self.game.map.regions["Dagorlad"].character_count < 1:
-                return self.game.map.regions["Dagorlad"]
-            elif self.game.map.regions["Fangorn"].character_count < 1:
-                return self.game.map.regions["Fangorn"]
-            elif self.game.map.regions["Mirkwood"].character_count < 1:
-                return self.game.map.regions["Mirkwood"]
-            elif self.map.regions["Rohan"].character_count < 1:
-                return self.map.regions["Rohan"]
-                # Done
-
-    def command_spawn_move_clicked(self):
-        # Get region to spawn to
-        spawn_region = self.get_spawn_region()
-
-        # Get player's character choice
-        character_choice = self.character_selected
-
-        # Validate
-        if spawn_region is not None and character_choice.region is None:
-            # Valid choices probably. # TODO: Confirm this works.
-            # Do spawn
-            try:
-                self.game.spawn_character(character_choice, spawn_region)
-                self.new_msg(character_choice.name + " spawned at " + spawn_region.name + ". ")
-                # Update character list, call next phase if done choosing
-                self.available_to_spawn_characters.remove(character_choice)
-            except Exception as ex:
-                print("Invalid choice. Need to implement error handling during spawn choices. " + ex.__str__())
-        else:
-            # Not valid choice, try again
-            self.new_msg("Invalid choice... try again.")
-
-        if self.good():
-            # Disable button for character already chosen.
-            for button_character in self.group_good_character_buttons.buttons():
-                if button_character.text() == character_choice.name:
-                    button_character.setDisabled(True)
-                    # TODO: Move highlighted radio button to non disabled button.
-        else:
-            for button_character in self.group_evil_character_buttons.buttons():
-                if button_character.text() == character_choice.name:
-                    button_character.setDisabled(True)
-
-        if not self.available_to_spawn_characters:
-            # Spawning complete
-            # No characters left in available to spawn characters list.
-            # Connect normal move button
-            self.button_command_move.clicked.disconnect()
-            # Make command move button do the regular move func
-            self.button_command_move.clicked.connect(self.command_move_clicked)
-            self.do_enemy_spawn()
-        else:
-            # Do prompt for next character to spawn to region
-            spawn_place = self.get_spawn_region()
-            self.add_dialogue("Choose character to spawn to "
-                              + spawn_place.name + ". ")
-        self.hide()
-        self.show()
-
-    def handle_game(self):
-        """
-        Have player choose side.
-        :return:
-        """
-        def choose_player():
-            self.msg_start("Welcome to The Lord Of the Rings Confrontation.")
-            self.msg_start("Select your side: Good, Evil")
-
-        choose_player()
-
-    def msg(self, txt):
-        self.add_dialogue(txt)
-
-    def msg_start(self, *args: str):
-        txt = self.text_box_start.text()
-        txt += "\n"
-        for arg in args:
-            txt += arg
-        self.text_box_start.setText(txt)
-
-    def new_msg(self, *args: str):
-        txt = ""
-        for arg in args:
-            txt += arg
-        self.text_box.setText(txt)
-
-    def select_evil_clicked(self):
-        self.human_player = self.player_sauron
-        self.computer_player = self.player_fellowship
-        self.new_msg("Evil player chosen. ")
-        self.start_game()
-
-    def select_good_clicked(self):
-        self.human_player = self.player_fellowship
-        self.computer_player = self.player_sauron
-        self.new_msg("Good player chosen. ")
-        self.start_game()
-
-    def add_dialogue(self, *args):
-        full_txt = ''
-        for txt in args:
-            full_txt += str(txt)
-        self.text_box.setText(self.text_box.text() + "\n" + full_txt)
-
-    def command_move_clicked(self):
-        # Get selected region
-        region_moved_to = self.region_selected
-        # Get selected character
-        moving_character = self.character_selected
-        # Make move happen
-        try:
-            self.game.player_turn(self.human_player, moving_character, region_moved_to)
-        except Exception as e:
-            print("Problem during command move clicked func.")
-            print(e)
-        pass
-
-    @property
-    def player_side(self) -> Character.Side:
-        if self.human_player == self.player_fellowship:
-            return Character.Side.GOOD
-        elif self.human_player == self.player_sauron:
-            return Character.Side.EVIL
-        else:
-            return None
-
-    @property
-    def character_selected(self) -> Character:
-        """
-        Gets Character from good/evil_character selected property.
-        :return: Character selected depending on side good/evil.
-        """
-        if Character.Side.GOOD == self.player_side:
-            return self.good_character_selected
-        elif Character.Side.EVIL == self.player_side:
-            return self.evil_character_selected
-        else:
-            return None
-
-    @property
-    def good_character_selected(self) -> Character:
-        # Currently selected good character radio button
-        selected_button = self.group_good_character_buttons.checkedButton()
-        # String name of character
-        character_name = selected_button.text()
-        # Get character
-        return self.game.get_character(character_name)
-
-    @property
-    def evil_character_selected(self) -> Character:
-        # Currently selected evil character radio button
-        selected_button = self.group_evil_character_buttons.checkedButton()
-        # String name of character
-        character_name = selected_button.text()
-        # Get character
-        return self.game.get_character(character_name)
-
-    @property
-    def region_selected(self) -> Region:
-        # Currently selected region radio button
-        selected_region = self.group_region_buttons.checkedButton()
-        # String name of character
-        region_name = selected_region.text()
-        # Get region
-        return self.game.get_region(region_name)

@@ -82,8 +82,6 @@ class Character(ABC):
             # Set characters region to passed region
             self.region = region
 
-            print("Character " + self.name + " moved to " + self.region.name + ". ")
-
             # Add character to chosen region's list of characters
             self.region.characters.append(self)
         except Exception as ex:
