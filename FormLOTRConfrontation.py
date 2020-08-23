@@ -481,6 +481,10 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.text_box.setText(self.text_box.text() + "\n" + full_txt)
 
     def choose_starting_positions(self):
+        """
+
+        :return:
+        """
         self.new_msg("Choose starting positions. ")
         spawn_place = self.game.get_spawn_region()
         self.add_dialogue(self.game.player_human.name + " chooses four of his characters and places them in "
@@ -512,6 +516,11 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         pass
 
     def command_spawn_move_clicked(self):
+        """
+        Moves selected character to selected region. If spawning complete,
+        spawns opponents characters, then calls start_game().
+        :return:
+        """
         # Get region to spawn to
         spawn_region = self.game.get_spawn_region()
 
@@ -556,6 +565,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
             # Next phase
             self.game.do_enemy_ai_spawn()
             # After all characters now spawned, may start game.
+            # -- STARTING REGULAR GAME HERE --
             self.start_game()
         else:
             # Do prompt for next character to spawn to region
@@ -601,7 +611,7 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         self.msg_start("Select your side: Good, Evil")
 
         self.show()
-        
+
     def graphics_scene_main_window(self):
         """
         QGraphicsScene to QGraphicsView central widget of self:QMainWindow
@@ -695,30 +705,46 @@ class FormLOTRConfrontation(PySide2.QtWidgets.QMainWindow):
         pass
 
     def select_evil_clicked(self):
+        """
+        One of two possibilities for first button push. Starts game with
+        player as evil. Moves to setup_game().
+        :return:
+        """
         self.game.player_human = self.game.player_sauron
         self.game.player_computer = self.game.player_fellowship
         self.new_msg("Evil player chosen. ")
         self.setup_game()
 
     def select_good_clicked(self):
+        """
+        One of two possibilities for first button push. Starts game with
+        player as evil. Moves to setup_game().
+        :return:
+        """
         self.game.player_human = self.game.player_fellowship
         self.game.player_computer = self.game.player_sauron
         self.new_msg("Good player chosen. ")
         self.setup_game()
 
     def setup_game(self):
+        """
+        Disables opposing player buttons, calls choose_starting_positions().
+        :return:
+        """
         self.graphics_scene_main_window()
         # Disable non player buttons (done after player chosen)
         self.disable_non_player_buttons()
         # Have player choose starting positions for his characters
-        self.choose_starting_positions()
+        #self.choose_starting_positions()
+        self.scaffolding()
 
     def start_game(self):
         # Game starts with AI player's turn
         self.new_msg("Game starts with AI player's turn.")
         # TODO: leftoff here
         self.game.do_ai_turn()
-        pass
 
-    def temp(self):
-        self.do_enemy_spawn()
+    def scaffolding(self):
+        # Setup game in order to test do ai turn()
+        for i in range(0, 9):
+            self.command_spawn_move_clicked()

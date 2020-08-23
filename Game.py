@@ -441,10 +441,11 @@ class Game:
                 return self.map.regions["Rohan"]
                 # Done
 
-    def get_spawn_region(self) -> Region:
+    def get_spawn_region(self) -> object:
         """
         Returns spawnable region based on player and current game map. None if no valid regions
         left/spawn phase complete.
+        :rtype: object
         :return: Region to be spawned. None if spawning complete for human player.
         """
         if self.player_human_side == Character.Side.GOOD:
@@ -547,6 +548,7 @@ class Game:
             # Get the info necessary to call battle(), then call it.
             ai_characters = []
             human_characters = []
+            # Gather characters in ai_characters and human_characters lists.
             for character in self.region_with_battle_event.characters:
                 if character.side == self.player_computer_side:
                     ai_characters.append(character)
